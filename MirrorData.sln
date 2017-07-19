@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MirrorData", "MirrorData\MirrorData.csproj", "{0534CFF3-1F4D-4521-9731-93A8F0178785}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MirrorData.Test", "MirrorData.Test\MirrorData.Test.csproj", "{FD8E0993-846F-4522-98C5-DB98B0AB2D27}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0534CFF3-1F4D-4521-9731-93A8F0178785}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0534CFF3-1F4D-4521-9731-93A8F0178785}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0534CFF3-1F4D-4521-9731-93A8F0178785}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0534CFF3-1F4D-4521-9731-93A8F0178785}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD8E0993-846F-4522-98C5-DB98B0AB2D27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD8E0993-846F-4522-98C5-DB98B0AB2D27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD8E0993-846F-4522-98C5-DB98B0AB2D27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD8E0993-846F-4522-98C5-DB98B0AB2D27}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
