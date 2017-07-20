@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using MirrorData.Interface;
 using RestSharp;
 
@@ -30,24 +31,17 @@ namespace MirrorData.Implementation
             url.Execute(request);
         }
 
-        public void UpdateElement(TT element)
+        public bool UpdateElement(TT element)
         {
-            var url = new RestClient();
-            var request = new RestRequest(this._creationUrl);
+            var url = new RestClient(_creationUrl);
+            var request = new RestRequest(Method.PUT)
+            {
+                RequestFormat = DataFormat.Json
+            };
             request.AddBody(element);
-            request.Method = Method.PATCH;
-            url.Execute(request);
+            var response = url.Execute(request);
+            return response.StatusCode == HttpStatusCode.OK;
         }
-
-        public void DeleteElement(TT element)
-        {
-            var url = new RestClient();
-            var request = new RestRequest(this._creationUrl);
-            request.AddBody(element);
-            request.Method = Method.DELETE;
-            url.Execute(request);
-        }
-
         #endregion
     }
 }

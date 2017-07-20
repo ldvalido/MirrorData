@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using MirrorData.CriteriaSolver;
 using MirrorData.Interface;
 
@@ -32,21 +33,13 @@ namespace MirrorData
         }
         #endregion
 
-        #region Public Properties                
+        #region Public Properties
         /// <summary>
-        /// Synches the specified direction.
+        /// 
         /// </summary>
-        /// <param name="direction">The direction.</param>
-        public void Synch(SynchroDirection direction)
-        {
-            return;
-        }
-        /// <summary>
-        /// Synches the specified direction.
-        /// </summary>
-        /// <param name="direction">The direction.</param>
-        /// <param name="solver">The solver.</param>
-        public void Synch(SynchroDirection direction, IConflictCriteriaSolver<TT,TS> solver)
+        /// <param name="solver"></param>
+        /// <param name="mapperFunc"></param>
+        public void Synch(IConflictCriteriaSolver<TT,TS> solver,Func<TT,TS> mapperFunc)
         {
             foreach (var el in _source)
             {
@@ -54,11 +47,12 @@ namespace MirrorData
                 var remoteElement = _target.First(targetEl => _target.FncGetKey(targetEl) == keySource);
                 if (remoteElement == null)
                 {
-                    _target.CreateElement(el);
+                    var elementToCreate = mapperFunc(el);
+                    _target.CreateElement(elementToCreate);
                 }
                 else
                 {
-                    var finalEl = solver.Resolve(el, remoteElement);
+                    var finalEl = solver.Resolve(el, remoteElement,mapperFunc);
                     _target.UpdateElement(finalEl);
                 }
             }

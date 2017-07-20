@@ -1,12 +1,14 @@
-﻿namespace MirrorData.CriteriaSolver
+﻿using System;
+
+namespace MirrorData.CriteriaSolver
 {
     public class OverWriteCriteriaSolver<TT,TS> : IConflictCriteriaSolver<TT,TS>
     {
         #region Implementation of IConflictCriteriaSolver<TT,TS>
 
-        public TS Resolve(TT source, TS target)
+        public TS Resolve(TT source, TS target, Func<TT, TS> mapperFunc)
         {
-            return target;
+            return mapperFunc(source);
         }
 
         #endregion
