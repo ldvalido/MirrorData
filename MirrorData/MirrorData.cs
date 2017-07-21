@@ -22,11 +22,20 @@ namespace MirrorData
         private readonly ISynchronizableSource<TS,int> _target;
         #endregion
 
-        #region MirrorData        
+        #region Public Properties
+        public IConflictCriteriaSolver<TT, TS> ConflictCriteriaSolver { get; set; }
+        #endregion
+
+        #region MirrorData
+
+        private MirrorData()
+        {
+            ConflictCriteriaSolver = new OverWriteCriteriaSolver<TT, TS>();
+        }         
         /// <summary>
         /// Initializes a new instance of the <see cref="MirrorData"/> class.
         /// </summary>
-        public MirrorData(ISource<TT,int> source,ISynchronizableSource<TS,int> target)
+        public MirrorData(ISource<TT,int> source,ISynchronizableSource<TS,int> target) :base()
         {
             this._source = source;
             this._target = target;
@@ -37,9 +46,8 @@ namespace MirrorData
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="solver"></param>
         /// <param name="mapperFunc"></param>
-        public void Synch(IConflictCriteriaSolver<TT,TS> solver,Func<TT,TS> mapperFunc)
+        public void Synch(Func<TT,TS> mapperFunc)
         {
             foreach (var el in _source)
             {
@@ -52,7 +60,7 @@ namespace MirrorData
                 }
                 else
                 {
-                    var finalEl = solver.Resolve(el, remoteElement,mapperFunc);
+                    var finalEl = ConflictCriteriaSolver.Resolve(el, remoteElement,mapperFunc);
                     _target.UpdateElement(finalEl);
                 }
             }
