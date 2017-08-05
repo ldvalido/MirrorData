@@ -48,6 +48,7 @@
     <Compile Include="CriteriaSolver\OverWriteCriteriaSolver.cs" />
     <Compile Include="Implementation\Source.cs" />
     <Compile Include="Implementation\SynchronizableSource.cs" />
+    <Compile Include="Interface\IClient.cs" />
     <Compile Include="Interface\ISource.cs" />
     <Compile Include="Interface\ISynchronizableSource.cs" />
     <Compile Include="MirrorData.cs" />

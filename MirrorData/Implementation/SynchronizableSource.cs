@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using MirrorData.Interface;
 using RestSharp;
 
 namespace MirrorData.Implementation
 {
-    public class SynchronizableSource<TT, TKey> : Source<TT, TKey>, ISynchronizableSource<TT, TKey>
+    public class SynchronizableSource<TT,TS> : Source<TT,TS>, ISynchronizableSource<TT,TS>
     {
         #region Private Propeerties
 
@@ -14,7 +12,7 @@ namespace MirrorData.Implementation
         #endregion
 
         #region C...tor
-        public SynchronizableSource(IEnumerable<TT> source, string creationUrl, Func<TT, TKey> fncKey) : base(source, fncKey)
+        public SynchronizableSource(IClient<TT,TS> source, string creationUrl) : base(source)
         {
             _creationUrl = creationUrl;
         }

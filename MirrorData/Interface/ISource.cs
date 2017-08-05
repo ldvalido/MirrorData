@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MirrorData.Interface
 {
-    public interface ISource<TT,TKey>:IEnumerable<TT>
+    public interface ISource<TT,TS>:IEnumerable<TT>
     {
-        void SetSource(IEnumerable<TT> source);
-        Func<TT, TKey> FncGetKey { get; }
+        void SetSource(IClient<TT,TS> source);
     }
 }

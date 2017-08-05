@@ -1,32 +1,24 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using MirrorData.Interface;
 
 namespace MirrorData.Implementation
 {
-    public class Source<TT,TKey> : ISource<TT,TKey>
+    public class Source<TT,TS> : ISource<TT,TS>
     {
         #region Private Properties
-        private IEnumerable<TT> _data;
-        private readonly string _urlCreate;
-        #endregion
-
-        #region Public Properties
-        public Func<TT, TKey> FncGetKey { get; }
-
+        private IClient<TT, TS> _data;
         #endregion
 
         #region C...tor
-        public Source(IEnumerable<TT> source, Func<TT, TKey> fncKey)
+        public Source(IClient<TT,TS> source)
         {
             _data = source;
-            FncGetKey = fncKey;
         } 
         #endregion
 
         #region Implementation of ISource<T>
-        public void SetSource(IEnumerable<TT> source)
+        public void SetSource(IClient<TT, TS> source)
         {
             _data = source;
         }
@@ -43,7 +35,7 @@ namespace MirrorData.Implementation
         /// </returns>
         public IEnumerator<TT> GetEnumerator()
         {
-            return _data.GetEnumerator();
+            return _data.ListAsync().Result.GetEnumerator();
         }
 
         /// <summary>

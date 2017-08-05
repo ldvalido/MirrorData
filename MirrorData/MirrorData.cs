@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using MirrorData.CriteriaSolver;
+using MirrorData.Implementation;
 using MirrorData.Interface;
 
 namespace MirrorData
@@ -8,37 +9,42 @@ namespace MirrorData
     /// <summary>
     /// 
     /// </summary>
-    public class MirrorData<TT,TS>
+    public class MirrorData<TS,TT>
     {
         //TODO: Abstract int key for weird elements. At the moment, this approach is enough.
         #region Private Properties        
         /// <summary>
         /// The source
         /// </summary>
-        private readonly ISource<TT,int> _source;
+        private readonly IClient<TS, int> _source;
         /// <summary>
         /// The target
         /// </summary>
-        private readonly ISynchronizableSource<TS,int> _target;
+        private readonly IClient<TT,int> _target;
+        /// <summary>
+        /// The creation URL
+        /// </summary>
+        private readonly string _creationUrl;
         #endregion
 
         #region Public Properties
-        public IConflictCriteriaSolver<TT, TS> ConflictCriteriaSolver { get; set; }
+        public IConflictCriteriaSolver<TS, TT> ConflictCriteriaSolver { get; set; }
         #endregion
 
         #region MirrorData
 
         private MirrorData()
         {
-            ConflictCriteriaSolver = new OverWriteCriteriaSolver<TT, TS>();
+            ConflictCriteriaSolver = new OverWriteCriteriaSolver<TS, TT>();
         }         
         /// <summary>
         /// Initializes a new instance of the <see cref="MirrorData"/> class.
         /// </summary>
-        public MirrorData(ISource<TT,int> source,ISynchronizableSource<TS,int> target) :base()
+        public MirrorData(IClient<TS,int> source, IClient<TT,int> target,string creationUrl) :base()
         {
             this._source = source;
             this._target = target;
+            this._creationUrl = creationUrl;
         }
         #endregion
 
@@ -47,21 +53,23 @@ namespace MirrorData
         /// 
         /// </summary>
         /// <param name="mapperFunc"></param>
-        public void Synch(Func<TT,TS> mapperFunc)
+        public void Synch(Func<TS,TT> mapperFunc)
         {
-            foreach (var el in _source)
+            var src = new Source<TS, int>(_source);
+            var dest = new SynchronizableSource<TT,int>(_target,_creationUrl);
+            foreach (var el in src)
             {
-                var keySource = _source.FncGetKey(el);
-                var remoteElement = _target.First(targetEl => _target.FncGetKey(targetEl) == keySource);
+                var keySource = _source.GetId(el);
+                var remoteElement = dest.First(targetEl => _target.GetId(targetEl) == keySource);
                 if (remoteElement == null)
                 {
                     var elementToCreate = mapperFunc(el);
-                    _target.CreateElement(elementToCreate);
+                    dest.CreateElement(elementToCreate);
                 }
                 else
                 {
-                    var finalEl = ConflictCriteriaSolver.Resolve(el, remoteElement,mapperFunc);
-                    _target.UpdateElement(finalEl);
+                    var finalEl = ConflictCriteriaSolver.Resolve(el, remoteElement, mapperFunc);
+                    dest.UpdateElement(finalEl);
                 }
             }
         }
